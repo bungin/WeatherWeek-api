@@ -38,8 +38,7 @@ class WeatherService {
   // TODO: Create fetchLocationData method
 
   private async fetchLocationData(query: string) {
-    const APIkey = "6dfef76b1f1270428b5bdfb531c0f100"
-    const url = `api.openweathermap.org/data/2.5/forecast?lat=${this.lat}&lon=${this.lon}&appid=${this.APIkey}`
+    const url = `https:api.openweathermap.org/data/2.5/forecast?lat=${this.lat}&lon=${this.lon}&appid=${this.APIkey}`
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -54,7 +53,12 @@ class WeatherService {
     }
   }
   // TODO: Create destructureLocationData method
-  // private destructureLocationData(locationData: Coordinates): Coordinates {}
+  private destructureLocationData(locationData: Coordinates): Coordinates {
+    return {
+      lat: locationData.lat,
+      lon: locationData.lon
+    };
+  }
   // TODO: Create buildGeocodeQuery method
   // private buildGeocodeQuery(): string {}
   // TODO: Create buildWeatherQuery method

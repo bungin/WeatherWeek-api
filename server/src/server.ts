@@ -10,8 +10,8 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(express.static('../client/dist'));    //static
-app.use(express.urlencoded(({extended: true})));  //needed?
-app.use(express.json()); //json
+// app.use(express.urlencoded(({extended: true})));  //needed?
+app.use(express.json()); //middleware json
 app.use(routes); //middlware routes
 
 // DOne: Serve static files of entire client dist folder
