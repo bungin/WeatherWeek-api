@@ -25,15 +25,11 @@ class WeatherService {
   private baseURL: string;
   private APIkey: string; //appid
   private cityName: string;
-  private lat: number;
-  private lon: number; // needed? defined in coordinates as well.
 
-  constructor(baseURL: string, APIkey: string, cityName: string, lat: number, lon: number) {
+  constructor(baseURL: string, APIkey: string, cityName: string) {
     this.baseURL = baseURL;
     this.APIkey = APIkey;
     this.cityName = cityName;
-    this.lat = lat;
-    this.lon = lon;
   }
   // TODO: Create fetchLocationData method
 
