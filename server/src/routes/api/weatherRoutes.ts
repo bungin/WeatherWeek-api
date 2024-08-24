@@ -5,8 +5,10 @@ import historyService from '../../service/historyService.js';
 
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const weatherData = await weatherService.getWeatherForCity(req.body.city);
-    await historyService.addCity(req.body.city);
+    console.log('Received city:', req.body.cityName); // Log the city name
+    const weatherData = await weatherService.getWeatherForCity(req.body.cityName);
+    console.log('Weather data:', weatherData); // Log the weather data
+    await historyService.addCity(req.body.cityName);
     res.status(200).json(weatherData); // Sets status to 200 OK and sends JSON response
   } catch (error) {
     if (error instanceof Error) {
@@ -17,9 +19,10 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/history', async (res: Response) => {
+router.get('/history', async (_req: Request, res: Response) => {
   try {
     const cities = await historyService.getCities();
+    console.log(cities)
     res.status(200).json(cities); // Sets status to 200 OK and sends JSON response
   } catch (error) {
     if (error instanceof Error) {

@@ -4,25 +4,16 @@ interface Coordinates {
 }
 
 class Weather {
-  private temp: number;
-  private wind: number;
-  private humidity: number;
+ temp: number;
+ wind: number;
+ humidity: number;
+ city: string;
 
-  constructor(temp: number, wind: number, humidity: number) {
+  constructor(temp: number, wind: number, humidity: number, city: string) {
     this.temp = temp;
     this.wind = wind;
     this.humidity = humidity;
-  }
-  public getTemp(): number {
-    return this.temp;
-  }
-
-  public getWind(): number {
-    return this.wind;
-  }
-
-  public getHumidity(): number {
-    return this.humidity;
+    this.city = city;
   }
 }
 
@@ -38,13 +29,11 @@ class WeatherService {
   }
 
   private buildGeocodeQuery(city: string, APIkey: string): string {
-    const baseURL = 'https://api.openweathermap.org/geo/1.0/direct';
-    const params = new URLSearchParams({
-      query: city,
-      APIkey: APIkey
-    });
+    const baseURL = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${APIkey}`;
   
-    return `${baseURL}?${params.toString()}`;
+    // return `${baseURL}?${params}`;
+    console.log(baseURL)
+    return baseURL;
   }
 
   private buildWeatherQuery(coordinates: Coordinates): string {
@@ -53,6 +42,7 @@ class WeatherService {
   }
 
   private async fetchAndDestructureLocationData(): Promise<Coordinates | null> {
+    console.log(this.cityName,'this cityname:')
     const url = this.buildGeocodeQuery(this.cityName, this.APIkey);
     try {
       const response = await fetch(url);
@@ -92,7 +82,8 @@ class WeatherService {
     const temp = response.list[0].main.temp;
     const wind = response.list[0].wind.speed;
     const humidity = response.list[0].main.humidity;
-    return new Weather(temp, wind, humidity);
+
+    return new Weather(temp, wind, humidity, this.cityName);
   }
 
   private buildForecastArray(weatherData: any[]): Weather[] {
@@ -100,7 +91,7 @@ class WeatherService {
       const temp = data.main.temp;
       const wind = data.wind.speed;
       const humidity = data.main.humidity;
-      return new Weather(temp, wind, humidity);
+      return new Weather(temp, wind, humidity, this.cityName);
     });
   }
 
@@ -122,5 +113,6 @@ class WeatherService {
     return { currentWeather, forecastArray };
   }
 }
-
-export default new WeatherService('https://api.openweathermap.org', 'YOUR_API_KEY', 'YOUR_CITY_NAME');
+import dotenv from 'dotenv';
+dotenv.config();
+export default new WeatherService('https://api.openweathermap.org', `${process.env.API_KEY}`, 'YOUR_CITY_NAME');

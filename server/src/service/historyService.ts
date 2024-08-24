@@ -16,7 +16,8 @@ class HistoryService {  //help from ian
   // TODO: Define a read method that reads from the searchHistory.json file
   private async read() {
     const data = await fs.readFile('./db/db.json', {encoding: 'utf8'})
-    return data || '';
+    return JSON.parse(data) || [];
+
   }
   // TODO: Define a write method that writes the updated cities array to the searchHistory.json file
   private async write(cities: City[]) {
