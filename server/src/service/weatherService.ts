@@ -13,6 +13,17 @@ class Weather {
     this.wind = wind;
     this.humidity = humidity;
   }
+  public getTemp(): number {
+    return this.temp;
+  }
+
+  public getWind(): number {
+    return this.wind;
+  }
+
+  public getHumidity(): number {
+    return this.humidity;
+  }
 }
 
 class WeatherService {
@@ -26,11 +37,10 @@ class WeatherService {
     this.cityName = cityName;
   }
 
-  private buildGeocodeQuery(city: string, zipcode: string, APIkey: string): string {
-    const baseURL = 'https://api.openweathermap.org/data/2.5/weather';
+  private buildGeocodeQuery(city: string, APIkey: string): string {
+    const baseURL = 'https://api.openweathermap.org/geo/1.0/direct';
     const params = new URLSearchParams({
       query: city,
-      zipcode: zipcode,
       APIkey: APIkey
     });
   
@@ -43,7 +53,7 @@ class WeatherService {
   }
 
   private async fetchAndDestructureLocationData(): Promise<Coordinates | null> {
-    const url = this.buildGeocodeQuery(this.cityName, '', this.APIkey);
+    const url = this.buildGeocodeQuery(this.cityName, this.APIkey);
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -79,13 +89,13 @@ class WeatherService {
   }
 
   private parseCurrentWeather(response: any): Weather {
-    const temp = response.main.temp;
-    const wind = response.wind.speed;
-    const humidity = response.main.humidity;
+    const temp = response.list[0].main.temp;
+    const wind = response.list[0].wind.speed;
+    const humidity = response.list[0].main.humidity;
     return new Weather(temp, wind, humidity);
   }
 
-  private buildForecastArray(currentWeather: Weather, weatherData: any[]): Weather[] {
+  private buildForecastArray(weatherData: any[]): Weather[] {
     return weatherData.map((data: any) => {
       const temp = data.main.temp;
       const wind = data.wind.speed;
@@ -107,7 +117,7 @@ class WeatherService {
     }
 
     const currentWeather = this.parseCurrentWeather(weatherData);
-    const forecastArray = this.buildForecastArray(currentWeather, weatherData.list);
+    const forecastArray = this.buildForecastArray(weatherData.list);
 
     return { currentWeather, forecastArray };
   }
