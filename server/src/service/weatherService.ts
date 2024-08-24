@@ -4,17 +4,28 @@ interface Coordinates {
 }
 
 class Weather {
- temp: number;
- wind: number;
+ tempF: number;
+ windSpeed: number;
  humidity: number;
  city: string;
 
-  constructor(temp: number, wind: number, humidity: number, city: string) {
-    this.temp = temp;
-    this.wind = wind;
+  constructor(tempF: number, windSpeed: number, humidity: number, city: string) {
+    this.tempF = tempF;
+    this.windSpeed = windSpeed;
     this.humidity = humidity;
     this.city = city;
   }
+  // public getTemp(): number {
+  //   return this.temp;
+  // }
+
+  // public getWind(): number {
+  //   return this.wind;
+  // }
+
+  // public getHumidity(): number {
+  //   return this.humidity;
+  // }
 }
 
 class WeatherService {
@@ -30,6 +41,9 @@ class WeatherService {
 
   private buildGeocodeQuery(city: string, APIkey: string): string {
     const baseURL = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${APIkey}`;
+    // const params = new URLSearchParams({
+    //   q: `?q=${city}&appid=${APIkey}`
+    // });
   
     // return `${baseURL}?${params}`;
     console.log(baseURL)
