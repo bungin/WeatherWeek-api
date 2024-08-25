@@ -1,5 +1,4 @@
 import './styles/jass.css';
-
 // * All necessary DOM elements selected
 const searchForm: HTMLFormElement = document.getElementById(
   'search-form'
@@ -45,7 +44,7 @@ const fetchWeather = async (cityName: string) => {
 
   const weatherData = await response.json();
 
-  console.log('weatherData: ', weatherData);
+  // console.log('weatherData: ', weatherData);
 
   renderCurrentWeather(weatherData[0]);
   renderForecast(weatherData.slice(1));
@@ -77,10 +76,16 @@ Render Functions
 */
 
 const renderCurrentWeather = (currentWeather: any): void => {
-  console.log(currentWeather)
-  const { city, date, icon, iconDescription, tempF, windSpeed, humidity } =
-    currentWeather;
-
+  console.log('curr', currentWeather) //crashes here
+  const { city, date, icon, iconDescription, tempF, windSpeed, humidity }=
+  currentWeather; // why the shit wont you work
+  console.log('City:', city); // none of this wooooorks
+  console.log('Date:', date); // none of this wooooorks
+  console.log('Icon:', icon); // none of this wooooorks
+  console.log('Icon Description:', iconDescription); //
+  console.log('Temperature (F):', tempF); // 
+  console.log('Wind Speed:', windSpeed); //
+  console.log('Humidity:', humidity); 
   // convert the following to typescript
   heading.textContent = `${city} (${date})`;
   weatherIcon.setAttribute(
