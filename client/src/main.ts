@@ -1,4 +1,5 @@
 import './styles/jass.css';
+
 // * All necessary DOM elements selected
 const searchForm: HTMLFormElement = document.getElementById(
   'search-form'
@@ -41,13 +42,14 @@ const fetchWeather = async (cityName: string) => {
     },
     body: JSON.stringify({ cityName }),
   });
+  console.log(response)
 
-  const weatherData = await response.json();
+  const weatherData = await response.json(); 
+  console.log('weatherData222: ', weatherData);//currently not printing
 
-  // console.log('weatherData: ', weatherData);
 
-  renderCurrentWeather(weatherData[0]);
-  renderForecast(weatherData.slice(1));
+  renderCurrentWeather(weatherData.currentWeather);
+  renderForecast(weatherData.forecastArray.slice(1));
 };
 
 const fetchSearchHistory = async () => {
@@ -77,13 +79,14 @@ Render Functions
 
 const renderCurrentWeather = (currentWeather: any): void => {
   console.log('curr', currentWeather) //crashes here
-  const { city, date, icon, iconDescription, tempF, windSpeed, humidity } = currentWeather; // why the shit wont you work
+  const { city, date, icon, iconDescription, temp, wind, humidity } = currentWeather; // why the shit wont you work
+  
   console.log('City:', city); // none of this wooooorks
   console.log('Date:', date); // none of this wooooorks
   console.log('Icon:', icon); // none of this wooooorks
   console.log('Icon Description:', iconDescription); //
-  console.log('Temperature (F):', tempF); // 
-  console.log('Wind Speed:', windSpeed); //
+  console.log('Temperature (F):', temp); // 
+  console.log('Wind Speed:', wind); //
   console.log('Humidity:', humidity); 
   // convert the following to typescript
   heading.textContent = `${city} (${date})`;
@@ -94,8 +97,8 @@ const renderCurrentWeather = (currentWeather: any): void => {
   weatherIcon.setAttribute('alt', iconDescription);
   weatherIcon.setAttribute('class', 'weather-img');
   heading.append(weatherIcon);
-  tempEl.textContent = `Temp: ${tempF}°F`;
-  windEl.textContent = `Wind: ${windSpeed} MPH`;
+  tempEl.textContent = `Temp: ${temp}°F`;
+  windEl.textContent = `Wind: ${wind} MPH`;
   humidityEl.textContent = `Humidity: ${humidity} %`;
 
   if (todayContainer) {
@@ -123,7 +126,7 @@ const renderForecast = (forecast: any): void => {
 };
 
 const renderForecastCard = (forecast: any) => {
-  const { date, icon, iconDescription, tempF, windSpeed, humidity } = forecast;
+  const { date, icon, iconDescription, temp, wind, humidity } = forecast;
 
   const { col, cardTitle, weatherIcon, tempEl, windEl, humidityEl } =
     createForecastCard();
@@ -135,8 +138,8 @@ const renderForecastCard = (forecast: any) => {
     `https://openweathermap.org/img/w/${icon}.png`
   );
   weatherIcon.setAttribute('alt', iconDescription);
-  tempEl.textContent = `Temp: ${tempF} °F`;
-  windEl.textContent = `Wind: ${windSpeed} MPH`;
+  tempEl.textContent = `Temp: ${temp} °F`;
+  windEl.textContent = `Wind: ${wind} MPH`;
   humidityEl.textContent = `Humidity: ${humidity} %`;
 
   if (forecastContainer) {

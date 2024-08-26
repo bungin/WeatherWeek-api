@@ -6,8 +6,7 @@ const router = Router();
 router.post('/', async (req: Request, res: Response) => {
   try {
     console.log('Received city:', req.body.cityName); // receiving the city name
-    const {currentWeather}  = await weatherService.getWeatherForCity(req.body.cityName);
-    console.log('Weather data:', currentWeather); // Log the weather data
+    const currentWeather  = await weatherService.getWeatherForCity(req.body.cityName);
     await historyService.addCity(req.body.cityName);
     res.status(200).json(currentWeather); // Sets status to 200 OK and sends JSON response
   } catch (error) {
@@ -23,7 +22,6 @@ router.post('/', async (req: Request, res: Response) => {
 router.get('/history', async (_req: Request, res: Response) => {
   try {
     const cities = await historyService.getCities();
-    console.log(cities)
     res.status(200).json(cities); // Sets status to 200 OK and sends JSON response
   } catch (error) {
     if (error instanceof Error) {
