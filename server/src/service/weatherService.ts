@@ -1,21 +1,14 @@
 import dotenv from 'dotenv';
+
 interface Coordinates {
   lat: number;
   lon: number;
 }
 
-class Weather {
- tempF: number;
- windSpeed: number;
- humidity: number;
- city: string;
-
-  constructor(tempF: number, windSpeed: number, humidity: number, city: string) {
-    this.tempF = tempF;
-    this.windSpeed = windSpeed;
-    this.humidity = humidity;
-    this.city = city;
-  }
+interface Weather {
+ temp: string;
+ wind: string;
+ humidity: string;
 }
 
 class WeatherService {
@@ -90,7 +83,7 @@ class WeatherService {
     const humidity = response.list[0].main.humidity;
     // console.log('main humidity', response.list[0].main.humidity);
     // console.log('parsecurrentweather this.cityname', this.cityName); //still good
-    return new Weather(temp, wind, humidity, this.cityName);
+    return {temp, wind, humidity};
   }
 
   private buildForecastArray(weatherData: any[]): Weather[] {
@@ -102,7 +95,7 @@ class WeatherService {
       const humidity = data.main.humidity;
       // console.log('data.main.humidity', data.main.humidity);
       // console.log('buildforecastarray this.cityname', this.cityName); //these are getting looped, pretty sure intentional
-      return new Weather(temp, wind, humidity, this.cityName);
+      return {temp, wind, humidity};
     });
   }
 
@@ -122,6 +115,7 @@ class WeatherService {
     const forecastArray = this.buildForecastArray(weatherData.list);
     console.log('currentWeather getweatherforcity', currentWeather); //still good here, despite what browser console states
     // console.log('forecastArray getweatherforcity', forecastArray); // good
+    console.log({...currentWeather})
     return { currentWeather, forecastArray };
   }
 }

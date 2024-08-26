@@ -21,7 +21,7 @@ class HistoryService {  //help from ian
   }
   // TODO: Define a write method that writes the updated cities array to the searchHistory.json file
   private async write(cities: City[]) {
-    return await fs.writeFile('./db/db.json', (JSON.stringify(cities)));
+    return await fs.writeFile('./db/db.json', JSON.stringify(cities));
   }
   // TODO: Define a getCities method that reads the cities from the searchHistory.json file and returns them as an array of City objects
   async getCities() {
@@ -30,13 +30,14 @@ class HistoryService {  //help from ian
   // TODO Define an addCity method that adds a city to the searchHistory.json file
   async addCity(city: string) {
     const toUpdate = await this.getCities();
-    const newCity = new City(
-      city,
-      v4()
-    )
-    const cities = JSON.parse(toUpdate as string)
-    cities.push(newCity);
-    this.write(cities);
+    console.log(toUpdate);
+    const newCity = {
+      name: city,
+      id: v4(),
+    }
+    toUpdate.push(newCity);
+    console.log('cities: ', toUpdate)
+    this.write(toUpdate);
   }
   // * BONUS TODO: Define a removeCity method that removes a city from the searchHistory.json file
   async removeCity(id: string) {
