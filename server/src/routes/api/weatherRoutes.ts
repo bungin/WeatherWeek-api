@@ -6,11 +6,12 @@ const router = Router();
 router.post('/', async (req: Request, res: Response) => {
   try {
     console.log('Received city:', req.body.cityName); // receiving the city name
-    const weatherData = await weatherService.getWeatherForCity(req.body.cityName);
-    // console.log('Weather data:', weatherData); // Log the weather data
+    const {currentWeather}  = await weatherService.getWeatherForCity(req.body.cityName);
+    console.log('Weather data:', currentWeather); // Log the weather data
     await historyService.addCity(req.body.cityName);
-    res.status(200).json(weatherData); // Sets status to 200 OK and sends JSON response
+    res.status(200).json(currentWeather); // Sets status to 200 OK and sends JSON response
   } catch (error) {
+    console.log(error);
     if (error instanceof Error) {
       res.status(500).json({ error: error.message }); // Sets status to 500 Internal Server Error and sends error message
     } else {
