@@ -77,8 +77,7 @@ Render Functions
 
 const renderCurrentWeather = (currentWeather: any): void => {
   console.log('curr', currentWeather) //crashes here
-  const { city, date, icon, iconDescription, tempF, windSpeed, humidity }=
-  currentWeather; // why the shit wont you work
+  const { city, date, icon, iconDescription, tempF, windSpeed, humidity } = currentWeather; // why the shit wont you work
   console.log('City:', city); // none of this wooooorks
   console.log('Date:', date); // none of this wooooorks
   console.log('Icon:', icon); // none of this wooooorks
