@@ -18,7 +18,7 @@ class Weather {
   }
 }
 
-class WeatherService {
+export default class WeatherService {
   private baseURL: string;
   private APIkey: string; //appid
   private cityName: string;
@@ -29,15 +29,16 @@ class WeatherService {
     this.cityName = cityName;
   }
   
-  private buildGeocodeQuery(cityName: string, APIkey: string): string {
+  public buildGeocodeQuery(cityName: string, APIkey: string): string {
     const baseURL = `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${APIkey}`;
     console.log(baseURL);
     return baseURL;
   }
 
-  private buildWeatherQuery(coordinates: Coordinates): string {
+  public buildWeatherQuery(coordinates: Coordinates): string {
     const { lat, lon } = coordinates;
     // console.log('lat', lat, 'lon', lon); //coords work
+    console.log(`${this.baseURL}/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${this.APIkey}`);
     return `${this.baseURL}/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${this.APIkey}`;
     
   }
@@ -126,4 +127,4 @@ class WeatherService {
   }
 }
 dotenv.config();
-export default new WeatherService('https://api.openweathermap.org', `${process.env.API_KEY}`, 'YOUR_CITY_NAME');
+// export default new WeatherService('https://api.openweathermap.org', `${process.env.API_KEY}`, 'YOUR_CITY_NAME');

@@ -2,11 +2,12 @@ import { Router, type Request, type Response } from 'express';
 import weatherService from '../../service/weatherService.js';
 import historyService from '../../service/historyService.js';
 const router = Router();
+const ws = new weatherService('https://api.openweathermap.org', `${process.env.API_KEY}`, 'YOUR_CITY_NAME');
 
 router.post('/', async (req: Request, res: Response) => {
   try {
     console.log('Received city:', req.body.cityName); // receiving the city name
-    const weatherData = await weatherService.getWeatherForCity(req.body.cityName);
+    const weatherData = await ws.getWeatherForCity(req.body.cityName);
     // console.log('Weather data:', weatherData); // Log the weather data
     await historyService.addCity(req.body.cityName);
     res.status(200).json(weatherData); // Sets status to 200 OK and sends JSON response
@@ -45,5 +46,4 @@ router.delete('/history/:id', async (req: Request, res: Response) => {
     }
   }
 });
-
 export default router;

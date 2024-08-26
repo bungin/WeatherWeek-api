@@ -1,4 +1,7 @@
 import './styles/jass.css';
+const baseURL = window.location.hostname;
+const port = '3001';
+const nodeURL = `http://${baseURL}:${port}`;
 // * All necessary DOM elements selected
 const searchForm: HTMLFormElement = document.getElementById(
   'search-form'
@@ -34,20 +37,21 @@ API Calls
 */
 
 const fetchWeather = async (cityName: string) => {
-  const response = await fetch('/api/weather/', {
+  const response = await fetch(`${nodeURL}/api/weather/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ cityName }),
   });
-
+  console.log('response', response); //
   const weatherData = await response.json();
 
   // console.log('weatherData: ', weatherData);
-
-  renderCurrentWeather(weatherData[0]);
-  renderForecast(weatherData.slice(1));
+  if (weatherData !== undefined)  { //nirav
+    renderCurrentWeather(weatherData[0]);
+    renderForecast(weatherData.slice(1));
+  }
 };
 
 const fetchSearchHistory = async () => {
@@ -77,15 +81,14 @@ Render Functions
 
 const renderCurrentWeather = (currentWeather: any): void => {
   console.log('curr', currentWeather) //crashes here
-  const { city, date, icon, iconDescription, tempF, windSpeed, humidity }=
-  currentWeather; // why the shit wont you work
-  console.log('City:', city); // none of this wooooorks
-  console.log('Date:', date); // none of this wooooorks
-  console.log('Icon:', icon); // none of this wooooorks
-  console.log('Icon Description:', iconDescription); //
-  console.log('Temperature (F):', tempF); // 
-  console.log('Wind Speed:', windSpeed); //
-  console.log('Humidity:', humidity); 
+  const { city, date, icon, iconDescription, tempF, windSpeed, humidity } = currentWeather;
+  // console.log('City:', city); // none of this wooooorks
+  // console.log('Date:', date); // none of this wooooorks
+  // console.log('Icon:', icon); // none of this wooooorks
+  // console.log('Icon Description:', iconDescription); //
+  // console.log('Temperature (F):', tempF); // 
+  // console.log('Wind Speed:', windSpeed); //
+  // console.log('Humidity:', humidity); 
   // convert the following to typescript
   heading.textContent = `${city} (${date})`;
   weatherIcon.setAttribute(
