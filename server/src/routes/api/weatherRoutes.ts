@@ -4,12 +4,11 @@ import historyService from '../../service/historyService.js';
 const router = Router();
 const ws = new weatherService('https://api.openweathermap.org', `${process.env.API_KEY}`, 'YOUR_CITY_NAME');
 
-router.post('/', async (req: Request, res: Response) => {
+
+router.get('/api/weather', async (req: Request, res: Response) => {
   try {
-    console.log('Received city:', req.body.cityName); // receiving the city name
     const weatherData = await ws.getWeatherForCity(req.body.cityName);
-    // console.log('Weather data:', weatherData); // Log the weather data
-    await historyService.addCity(req.body.cityName);
+    console.log('apiweather',weatherData);
     res.status(200).json(weatherData); // Sets status to 200 OK and sends JSON response
   } catch (error) {
     if (error instanceof Error) {
@@ -23,7 +22,7 @@ router.post('/', async (req: Request, res: Response) => {
 router.get('/history', async (_req: Request, res: Response) => {
   try {
     const cities = await historyService.getCities();
-    console.log(cities)
+    // console.log(cities)
     res.status(200).json(cities); // Sets status to 200 OK and sends JSON response
   } catch (error) {
     if (error instanceof Error) {
@@ -46,4 +45,21 @@ router.delete('/history/:id', async (req: Request, res: Response) => {
     }
   }
 });
+
+router.post('/', async (req: Request, res: Response) => {
+  try {
+    console.log('Received city:', req.body.cityName); // receiving the city name
+    const weatherData = await ws.getWeatherForCity(req.body.cityName);
+    // console.log('Weather data:', weatherData); // Log the weather data
+    await historyService.addCity(req.body.cityName);
+    res.status(200).json(weatherData); // Sets status to 200 OK and sends JSON response
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message }); // Sets status to 500 Internal Server Error and sends error message
+    } else {
+      res.status(500).json({ error: 'An unknown error occurred' }); // Handles unknown error type
+    }
+  }
+});
+
 export default router;

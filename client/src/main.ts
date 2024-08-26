@@ -37,7 +37,7 @@ API Calls
 */
 
 const fetchWeather = async (cityName: string) => {
-  const response = await fetch(`${nodeURL}/api/weather/`, {
+  const response = await fetch(`${nodeURL}/weather/api/weather/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
