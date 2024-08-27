@@ -42,14 +42,11 @@ const fetchWeather = async (cityName: string) => {
     },
     body: JSON.stringify({ cityName }),
   });
-  console.log(response)
 
   const weatherData = await response.json(); 
-  console.log('weatherData222: ', weatherData);//currently not printing
-
 
   renderCurrentWeather(weatherData.currentWeather);
-  renderForecast(weatherData.forecastArray.slice(1));
+  renderForecast(weatherData.forecastArray);
 };
 
 const fetchSearchHistory = async () => {
@@ -78,17 +75,7 @@ Render Functions
 */
 
 const renderCurrentWeather = (currentWeather: any): void => {
-  console.log('curr', currentWeather) //crashes here
-  const { city, date, icon, iconDescription, temp, wind, humidity } = currentWeather; // why the shit wont you work
-  
-  console.log('City:', city); // none of this wooooorks
-  console.log('Date:', date); // none of this wooooorks
-  console.log('Icon:', icon); // none of this wooooorks
-  console.log('Icon Description:', iconDescription); //
-  console.log('Temperature (F):', temp); // 
-  console.log('Wind Speed:', wind); //
-  console.log('Humidity:', humidity); 
-  // convert the following to typescript
+  const { city, date, icon, iconDescription, temp, wind, humidity } = currentWeather;
   heading.textContent = `${city} (${date})`;
   weatherIcon.setAttribute(
     'src',
@@ -131,7 +118,6 @@ const renderForecastCard = (forecast: any) => {
   const { col, cardTitle, weatherIcon, tempEl, windEl, humidityEl } =
     createForecastCard();
 
-  // Add content to elements
   cardTitle.textContent = date;
   weatherIcon.setAttribute(
     'src',
@@ -158,7 +144,6 @@ const renderSearchHistory = async (searchHistory: any) => {
         '<p class="text-center">No Previous Search History</p>';
     }
 
-    // * Start at end of history array and count down to show the most recent cities at the top.
     for (let i = historyList.length - 1; i >= 0; i--) {
       const historyItem = buildHistoryListItem(historyList[i]);
       searchHistoryContainer.append(historyItem);

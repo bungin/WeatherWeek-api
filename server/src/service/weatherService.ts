@@ -9,13 +9,15 @@ interface Weather {
  temp: string;
  wind: string;
  humidity: string;
+ city: string;
+ date: string;
  icon: string;
- description: string;
+ iconDescription: string;
 }
 
 class WeatherService {
   private baseURL: string;
-  private APIkey: string; //appid
+  private APIkey: string;
   private cityName: string;
   
   constructor(baseURL: string, APIkey: string, cityName: string) {
@@ -31,8 +33,7 @@ class WeatherService {
 
   private buildWeatherQuery(coordinates: Coordinates): string {
     const { lat, lon } = coordinates;
-    // console.log('lat', lat, 'lon', lon); //coords work
-    return `${this.baseURL}/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${this.APIkey}`;
+    return `${this.baseURL}/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${this.APIkey}&units=imperial`;
     
   }
 
@@ -74,28 +75,32 @@ class WeatherService {
   }
 
   private parseCurrentWeather(response: any): Weather {
+
     const temp = response.list[0].main.temp;
-    // console.log('main temp',response.list[0].main.temp);
     const wind = response.list[0].wind.speed;
-    // console.log('wind speed',response.list[0].wind.speed);
     const humidity = response.list[0].main.humidity;
-    // const city = response.list.name;
+    const city = response.city.name;
     const icon = response.list[0].weather[0].icon;
-    const description = response.list[0].weather[0].description;
-    console.log('main humidity', response.list[0]);
-    // console.log('parsecurrentweather this.cityname', this.cityName); //still good
-    return {temp, wind, humidity, icon, description};
+    const iconDescription = response.list[0].weather[0].description;
+    const date = new Date().toLocaleDateString();
+    return {temp, wind, humidity, city, date, icon, iconDescription};
   }
 
   private buildForecastArray(weatherData: any[]): Weather[] {
-    return weatherData.map((data: any) => {
-      const temp = data.main.temp;
-      const wind = data.wind.speed;
-      const humidity = data.main.humidity;
-      const icon = data.weather.icon;
-      const description = data.weather.description;
-      return {temp, wind, humidity, icon, description};
-    });
+    const forecastArray = [];
+    for (let i = 0; i < weatherData.length; i+=8) {
+      const temp = weatherData[i].main.temp;
+      const wind = weatherData[i].wind.speed;
+      const humidity = weatherData[i].main.humidity;
+      const city = this.cityName;
+      const icon = weatherData[i].weather[0].icon;
+      const iconDescription = weatherData[i].weather[0].description;
+      const date = new Date(weatherData[i].dt * 1000).toLocaleDateString();
+      forecastArray.push({temp, wind, humidity, city, date, icon, iconDescription});
+    }
+    
+
+    return forecastArray;
   }
 
   public async getWeatherForCity(city: string) {
@@ -112,11 +117,9 @@ class WeatherService {
 
     const currentWeather = this.parseCurrentWeather(weatherData);
     const forecastArray = this.buildForecastArray(weatherData.list);
-    // console.log('currentWeather getweatherforcity', currentWeather); //still good here, despite what browser console states
-    // console.log('forecastArray getweatherforcity', forecastArray); // good
-    // console.log({...currentWeather})
+
     return { currentWeather, forecastArray };
   }
 }
 dotenv.config();
-export default new WeatherService('https://api.openweathermap.org', `${process.env.API_KEY}`, ''); //i think empty string is more appropriate?
+export default new WeatherService('https://api.openweathermap.org', `${process.env.API_KEY}`, '');
