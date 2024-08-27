@@ -2,6 +2,7 @@
 # WeatherWeek-api
 - Site: https://weatherweek-api.onrender.com/
 - NOTE: This will take a while to load, using Renders free option.
+- NOTE: The delete button for the history is not currently working.
 ## Badges
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
